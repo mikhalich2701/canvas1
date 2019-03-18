@@ -1,0 +1,62 @@
+@font-face {
+    font-family: 'sf_ui_display';
+    src: url('../fonts/ofont.ru_sf_ui_display-webfont.woff2') format('woff2'),
+         url('../fonts/ofont.ru_sf_ui_display-webfont.woff') format('woff'),
+         url('../fonts/ofont.ru_sf_ui_display-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'sf_ui_display';
+    src: url('../fonts/sf-ui-display-bold-58646a511e3d9-webfont.woff2') format('woff2'),
+         url('../fonts/sf-ui-display-bold-58646a511e3d9-webfont.woff') format('woff'),
+         url('../fonts/sf-ui-display-bold-58646a511e3d9-webfont.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'sf_ui_display';
+    src: url('../fonts/sf-ui-display-light-58646b33e0551-webfont.woff2') format('woff2'),
+         url('../fonts/sf-ui-display-light-58646b33e0551-webfont.woff') format('woff'),
+         url('../fonts/sf-ui-display-light-58646b33e0551-webfont.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'sf_ui_display';
+    src: url('../fonts/sf-ui-display-medium-58646be638f96-webfont.woff2') format('woff2'),
+         url('../fonts/sf-ui-display-medium-58646be638f96-webfont.woff') format('woff'),
+         url('../fonts/sf-ui-display-medium-58646be638f96-webfont.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'sf_ui_display';
+    src: url('../fonts/sf-ui-display-semibold-58646eddcae92-webfont.woff2') format('woff2'),
+         url('../fonts/sf-ui-display-semibold-58646eddcae92-webfont.woff') format('woff'),
+         url('../fonts/sf-ui-display-semibold-58646eddcae92-webfont.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'sf_ui_displayheavy';
+    src: url('../fonts/sf-ui-display-heavy-586470160b9e5-webfont.woff2') format('woff2'),
+         url('../fonts/sf-ui-display-heavy-586470160b9e5-webfont.woff') format('woff'),
+         url('../fonts/sf-ui-display-heavy-586470160b9e5-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ds-digitalnormal';
+    src: url('../fonts/ds-digi-webfont.woff2') format('woff2'),
+         url('../fonts/ds-digi-webfont.woff') format('woff'),
+         url('../fonts/ds-digi-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

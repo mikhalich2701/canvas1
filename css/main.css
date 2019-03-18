@@ -1,0 +1,260 @@
+@charset "UTF-8";
+
+/*================================== САЙТ ===============================*/
+
+/*============================ ГЛАВНАЯ ===========================*/
+
+#canvas {
+  border: 1px solid #000;
+  background: #ccc;
+  width: 100%;
+  height: 100%;
+}
+
+/*======================= Стартовые настройки ====================*/
+
+* {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+*::-webkit-input-placeholder {
+  color: #1c1c1c;
+  opacity: 0.29;
+  font-size: 1.13rem;
+  font-weight: 400;
+}
+
+*:-moz-placeholder {
+  color: #1c1c1c;
+  opacity: 0.29;
+  font-size: 1.13rem;
+  font-weight: 400;
+}
+
+*::-moz-placeholder {
+  color: #1c1c1c;
+  opacity: 0.29;
+  font-size: 1.13rem;
+  font-weight: 400;
+}
+
+*:-ms-input-placeholder {
+  color: #1c1c1c;
+  opacity: 0.29;
+  font-size: 1.13rem;
+  font-weight: 400;
+}
+
+body input:focus:required:invalid,
+body textarea:focus:required:invalid {
+  color: #fff;
+}
+
+body input:required:valid,
+body textarea:required:valid {
+  color: #fff;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  min-width: 320px;
+  position: relative;
+  color: #1c1c1c;
+  font-family: "sf_ui_display", sans-serif;
+  font-weight: normal;
+  overflow-x: hidden;
+  background: #fff;
+}
+
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+::-moz-selection {
+  color: #fba200;
+}
+
+::selection {
+  color: #fba200;
+}
+
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+  font-family: 'sf_ui_displayheavy';
+}
+
+h1,
+.h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  letter-spacing: -1px;
+  line-height: 3.5rem;
+}
+
+h2,
+.h2 {
+  font-size: 2.5rem;
+}
+
+h3,
+.h3 {
+  font-size: 2.4rem;
+  font-weight: bold;
+}
+
+h4,
+.h4 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+h5,
+.h5 {
+  font-family: "sf_ui_display", sans-serif;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+h6,
+.h6 {
+  font-size: 1rem;
+  color: #1c1c1c;
+  font-weight: 800;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+a {
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+button:active,
+button:focus,
+input:active,
+input:focus,
+select:active,
+select:focus,
+a:active,
+a:focus {
+  border: none;
+  outline: none;
+}
+
+.slick-slide,
+.slick-active,
+.slick-current {
+  outline: none;
+}
+
+.dot {
+  color: #fba200;
+}
+
+/*==============================ADD CLASS==============================*/
+
+.img-responsive {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.button {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 0;
+  padding-top: 5px;
+  height: 35px;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: bold;
+  -webkit-border-radius: 22px;
+  border-radius: 22px;
+  background: #000;
+  outline: none;
+  cursor: pointer;
+  -webkit-transition: color .3s;
+  -o-transition: color .3s;
+  transition: color .3s;
+}
+
+.button:hover {
+  color: #e6e6e6;
+}
+
+.button:active rgba(0, 0, 0, 0.5) {
+  outline: none;
+}
+
+.button:focus {
+  outline: none;
+}
+
+/*==========================МЕДИА-запросы==========================*/
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1170px !important;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  h1,
+  .h1 {
+    font-size: 2.24rem;
+    line-height: 3rem;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  h1,
+  .h1 {
+    font-size: 1.68rem;
+    line-height: 2.5rem;
+  }
+}
