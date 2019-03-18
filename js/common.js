@@ -27,7 +27,7 @@ $(document).ready(function (){
       ];
 
       var gravity = 1;
-      var friction = 0.95;
+      var friction = 0.9;
 
       //Event Listener
       window.addEventListener('mousemove', function(event){
@@ -52,22 +52,26 @@ $(document).ready(function (){
       }
 
       //Object
-
-      function Ball(x, y, dy, radius, color){
+      function Ball(x, y, dx, dy, radius, color){
         this.x = x;
         this.y = y; 
+        this.dx = dx;
         this.dy = dy;
         this.radius = radius;
         this.color = color;
         
         this.update = function(){
-          if(this.y + this.radius > canvas.height){
+          if(this.y + this.radius + this.dy > canvas.height){
             this.dy = -this.dy * friction;
-            //console.log(this.dy);
           } else {
             this.dy += gravity;
-            //console.log(this.dy);
           }
+
+          if (this.x + this.radius + this.dx > canvas.width || this.x - this.radius <= 0) {
+            this.dx = -this.dx
+          }
+
+          this.x += this.dx;
           this.y += this.dy;
           this.draw();
         };
@@ -77,22 +81,35 @@ $(document).ready(function (){
           ctx.arc( this.x, this.y, this.radius, 0, 360 * grad, false);
           ctx.fillStyle = this.color;
           ctx.fill();
+          ctx.stroke();
           ctx.closePath();
         };  
 
       }
 
-      // Inplementation
+      // Implementation
       var ball;
+      var ballArray;
       function init(){
-        ball = new Ball(canvas.width / 2, canvas.height / 2, 2, 30, 'red')
+        ballArray = [];
+        for (var i = 0; i < 400; i++) {
+          var radius = randomIntFromRange(8, 20);
+          var x = randomIntFromRange(radius, canvas.width - radius);
+          var y = randomIntFromRange(0, canvas.height - radius);
+          var dx = randomIntFromRange(-2, 2);
+          var dy = randomIntFromRange(-2, 2);
+          var color = randomColor(colors);
+          ballArray.push(new Ball(x, y, dx, dy, radius, color));
+        }
       }
 
       //Animation Loop
       function animate(){
         requestAnimationFrame(animate);
-        ctx.clearRect(0, 0, canvas.width, canvas.height); 
-        ball.update();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = 0; i < ballArray.length; i++) {
+          ballArray[i].update();
+        }
       }
 
       init();
