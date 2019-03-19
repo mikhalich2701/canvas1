@@ -227,6 +227,34 @@ $(document).ready(function (){
         return colors[Math.floor(Math.random() * colors.length)];
       }
 
+      function gradient(x0, y0, r0, x1, y1, r1){
+        const radGrad = ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
+        // radGrad.addColorStop(0, "rgba(187, 7, 7, 0.2)");
+        // radGrad.addColorStop(0.4, "rgba(187, 7, 7, 0.4)");
+        // radGrad.addColorStop(0.5, "rgba(187, 7, 7, 0.5)");
+        // radGrad.addColorStop(0.6, "rgba(187, 7, 7, 0.6)");
+        // radGrad.addColorStop(0.9, "rgba(187, 7, 7, 0.8)");
+        // radGrad.addColorStop(1, "rgba(187, 7, 7, 1)");
+        return radGrad; 
+      }
+
+      function stopGradient(){
+        const stopColor = {
+          rr: randomIntFromRange(0, 255),
+          gg: randomIntFromRange(0, 255),
+          bb: randomIntFromRange(0, 255)
+        }
+        
+        //const radGrad = ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
+        // radGrad.addColorStop(0, "rgba(" + stopColor1 + "," + stopColor2 + "," + stopColor3 + ", 0.2)");
+        // radGrad.addColorStop(0.4, "rgba(" + stopColor1 + "," + stopColor2 + "," + stopColor3 + ", 0.4)");
+        // radGrad.addColorStop(0.5, "rgba(" + stopColor1 + "," + stopColor2 + "," + stopColor3 + ", 0.5)");
+        // radGrad.addColorStop(0.6, "rgba(" + stopColor1 + "," + stopColor2 + "," + stopColor3 + ", 0.6)");
+        // radGrad.addColorStop(0.9, "rgba(" + stopColor1 + "," + stopColor2 + "," + stopColor3 + ", 0.8)");
+        // radGrad.addColorStop(1, "rgba(" + stopColor1 + "," + stopColor2 + "," + stopColor3 + ", 1)");
+        return stopColor; 
+      }
+
       function distance(x1, y1, x2, y2){
         const xDist = x2 - x1;
         const yDist = y2 - y1;
@@ -287,11 +315,11 @@ $(document).ready(function (){
           x: (Math.random() - 0.5) * 5,
           y: (Math.random() - 0.5) * 5
         };
-        this.radius = randomIntFromRange(10, 30);
-        this.color = color;
+        this.radius = randomIntFromRange(20, 40);
+        //this.color = gradient(this.x, this.y, this.radius / 10, this.x, this.y, this.radius);
         this.mass = 1;
         this.opacity = 0;
-        
+        this.stopColor = stopGradient();
         this.update = particles => {
           this.draw();
 
@@ -325,11 +353,18 @@ $(document).ready(function (){
           ctx.beginPath();
           ctx.arc( this.x, this.y, this.radius, 0, 360 * grad, false);
           ctx.save();
-          ctx.globalAlpha = this.opacity;          
-          ctx.fillStyle = this.color;
+          //ctx.globalAlpha = this.opacity;          
+          const radGrad = gradient(this.x, this.y, this.radius / 10, this.x, this.y, this.radius);
+          radGrad.addColorStop(0, "rgba(" + this.stopColor.rr + "," + this.stopColor.gg + "," + this.stopColor.gg + ", 0.2)");
+          radGrad.addColorStop(0.4, "rgba(" + this.stopColor.rr + "," + this.stopColor.gg + "," + this.stopColor.gg + ", 0.4)");
+          radGrad.addColorStop(0.5, "rgba(" + this.stopColor.rr + "," + this.stopColor.gg + "," + this.stopColor.gg + ", 0.5)");
+          radGrad.addColorStop(0.6, "rgba(" + this.stopColor.rr + "," + this.stopColor.gg + "," + this.stopColor.gg + ", 0.6)");
+          radGrad.addColorStop(0.9, "rgba(" + this.stopColor.rr + "," + this.stopColor.gg + "," + this.stopColor.gg + ", 0.8)");
+          radGrad.addColorStop(1, "rgba(" + this.stopColor.rr + "," + this.stopColor.gg + "," + this.stopColor.gg + ", 1)");
+          ctx.fillStyle = radGrad;
           ctx.fill();
           ctx.restore();
-          ctx.strokeStyle = this.color;
+          ctx.strokeStyle = "rgba(" + this.stopColor.rr + "," + this.stopColor.gg + "," + this.stopColor.gg + ", 1)";
           ctx.stroke();
           ctx.closePath();
         };  
@@ -342,7 +377,7 @@ $(document).ready(function (){
       function init(){
         particles = [];
         for (let i = 0; i < 50; i++) {
-          const radius = 15;
+          const radius = 40;
           let x = randomIntFromRange(radius, canvas.width - radius);
           let y = randomIntFromRange(radius, canvas.height - radius);          
           const color  = randomColor(colors);
