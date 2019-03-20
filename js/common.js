@@ -196,19 +196,34 @@ $(document).ready(function (){
 
       const mouse = {
         x: innerWidth / 2,
-        y: innerHeight / 2
+        y: innerHeight / 2,
+        isDown: false
       };
 
       const colors = [
-        '#2185c5',
-        '#7ecefd',
-        '#ff7f66'
+        {tone1: '#05056c', tone2: '#0d0c8f', tone3: '#0b0a95', tone4: '#0b0aaa', tone5: '#0d0bc9', tone6: '#110fe2', tone7: '#2826ec'},
+        {tone1: '#0e581d', tone2: '#127826', tone3: '#15952e', tone4: '#18ae35', tone5: '#18c639', tone6: '#18d93c', tone7: '#27f24d'},
+        {tone1: '#7a116a', tone2: '#91127d', tone3: '#a5158f', tone4: '#bb13a2', tone5: '#d015b4', tone6: '#e517c6', tone7: '#f331d6'},
+        {tone1: '#7f491a', tone2: '#96561e', tone3: '#a96020', tone4: '#be6b22', tone5: '#d17524', tone6: '#df7c25', tone7: '#ef892e'}
       ];
 
       //Event Listener
       window.addEventListener('mousemove', function(event){
         mouse.x = event.clientX;
         mouse.y = event.clientY;
+      });
+
+      window.addEventListener('mousedown', function(e){
+        const clicked ={
+          x: e.clientX,
+          y: e.clientY          
+        };
+        mouse.isDown = true;
+        //particles.push(new Particle(mouse.x, mouse.y, randomColor(colors)));;
+      });
+
+      window.addEventListener('mouseup', function(e){
+        mouse.isDown = false;
       });
 
       window.addEventListener('resize', () => {
@@ -228,32 +243,18 @@ $(document).ready(function (){
       }
 
       function gradient(x0, y0, r0, x1, y1, r1){
-        const radGrad = ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
-        // radGrad.addColorStop(0, "rgba(187, 7, 7, 0.2)");
-        // radGrad.addColorStop(0.4, "rgba(187, 7, 7, 0.4)");
-        // radGrad.addColorStop(0.5, "rgba(187, 7, 7, 0.5)");
-        // radGrad.addColorStop(0.6, "rgba(187, 7, 7, 0.6)");
-        // radGrad.addColorStop(0.9, "rgba(187, 7, 7, 0.8)");
-        // radGrad.addColorStop(1, "rgba(187, 7, 7, 1)");
+        const radGrad = ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);;
         return radGrad; 
       }
 
-      function stopGradient(){
-        const stopColor = {
-          rr: randomIntFromRange(0, 255),
-          gg: randomIntFromRange(0, 255),
-          bb: randomIntFromRange(0, 255)
-        }
-        
-        //const radGrad = ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);
-        // radGrad.addColorStop(0, "rgba(" + stopColor1 + "," + stopColor2 + "," + stopColor3 + ", 0.2)");
-        // radGrad.addColorStop(0.4, "rgba(" + stopColor1 + "," + stopColor2 + "," + stopColor3 + ", 0.4)");
-        // radGrad.addColorStop(0.5, "rgba(" + stopColor1 + "," + stopColor2 + "," + stopColor3 + ", 0.5)");
-        // radGrad.addColorStop(0.6, "rgba(" + stopColor1 + "," + stopColor2 + "," + stopColor3 + ", 0.6)");
-        // radGrad.addColorStop(0.9, "rgba(" + stopColor1 + "," + stopColor2 + "," + stopColor3 + ", 0.8)");
-        // radGrad.addColorStop(1, "rgba(" + stopColor1 + "," + stopColor2 + "," + stopColor3 + ", 1)");
-        return stopColor; 
-      }
+      // function stopGradient(){
+      //   const stopColor = {
+      //     rr: randomIntFromRange(0, 255),
+      //     gg: randomIntFromRange(0, 255),
+      //     bb: randomIntFromRange(0, 255)
+      //   }
+      //   return stopColor; 
+      // }
 
       function distance(x1, y1, x2, y2){
         const xDist = x2 - x1;
@@ -315,11 +316,12 @@ $(document).ready(function (){
           x: (Math.random() - 0.5) * 5,
           y: (Math.random() - 0.5) * 5
         };
-        this.radius = randomIntFromRange(20, 40);
-        //this.color = gradient(this.x, this.y, this.radius / 10, this.x, this.y, this.radius);
+        this.radius = randomIntFromRange(15, 30);
         this.mass = 1;
-        this.opacity = 0;
-        this.stopColor = stopGradient();
+        this.opacity = 0.5;
+        this.color = randomColor(colors);
+        //this.stopColor = stopGradient();
+        //console.log(this.color);
         this.update = particles => {
           this.draw();
 
@@ -338,11 +340,21 @@ $(document).ready(function (){
           }
 
           //mouse
-          if (distance(mouse.x, mouse.y, this.x, this.y) < 120 && this.opacity < 0.2) {
-            this.opacity += 0.02;
-          } else if(this.opacity > 0){
-            this.opacity -= 0.02;
-            this.opacity = Math.max(0, this.opacity);
+          if (distance(mouse.x, mouse.y, this.x, this.y) < 120 && this.opacity < 1) {
+            this.opacity += 0.01;
+          } else if(this.opacity > 0.5){
+            this.opacity -= 0.01;
+            this.opacity = Math.max(0.5, this.opacity);
+          }
+
+          //click
+          // if (distance(clicked.x, clicked.y, this.x, this.y) < this.radius) {
+          //   console.log('EEE');
+          // }
+
+          if (mouse.isDown === true) {
+            console.log(clicked);
+            mouse.isDown = false;
           }
 
           this.x += this.velocity.x;         
@@ -353,18 +365,19 @@ $(document).ready(function (){
           ctx.beginPath();
           ctx.arc( this.x, this.y, this.radius, 0, 360 * grad, false);
           ctx.save();
-          //ctx.globalAlpha = this.opacity;          
+          ctx.globalAlpha = this.opacity;          
           const radGrad = gradient(this.x, this.y, this.radius / 10, this.x, this.y, this.radius);
-          radGrad.addColorStop(0, "rgba(" + this.stopColor.rr + "," + this.stopColor.gg + "," + this.stopColor.gg + ", 0.2)");
-          radGrad.addColorStop(0.4, "rgba(" + this.stopColor.rr + "," + this.stopColor.gg + "," + this.stopColor.gg + ", 0.4)");
-          radGrad.addColorStop(0.5, "rgba(" + this.stopColor.rr + "," + this.stopColor.gg + "," + this.stopColor.gg + ", 0.5)");
-          radGrad.addColorStop(0.6, "rgba(" + this.stopColor.rr + "," + this.stopColor.gg + "," + this.stopColor.gg + ", 0.6)");
-          radGrad.addColorStop(0.9, "rgba(" + this.stopColor.rr + "," + this.stopColor.gg + "," + this.stopColor.gg + ", 0.8)");
-          radGrad.addColorStop(1, "rgba(" + this.stopColor.rr + "," + this.stopColor.gg + "," + this.stopColor.gg + ", 1)");
+          radGrad.addColorStop(0, this.color.tone7);
+          radGrad.addColorStop(0.2, this.color.tone6);
+          radGrad.addColorStop(0.4, this.color.tone5);
+          radGrad.addColorStop(0.6, this.color.tone4);
+          radGrad.addColorStop(0.8, this.color.tone3);
+          radGrad.addColorStop(0.9, this.color.tone2);
+          radGrad.addColorStop(1, this.color.tone1);
           ctx.fillStyle = radGrad;
           ctx.fill();
           ctx.restore();
-          ctx.strokeStyle = "rgba(" + this.stopColor.rr + "," + this.stopColor.gg + "," + this.stopColor.gg + ", 1)";
+          ctx.strokeStyle = this.color.tone1
           ctx.stroke();
           ctx.closePath();
         };  
@@ -376,8 +389,8 @@ $(document).ready(function (){
 
       function init(){
         particles = [];
-        for (let i = 0; i < 50; i++) {
-          const radius = 40;
+        for (let i = 0; i < 40; i++) {
+          const radius = 30;
           let x = randomIntFromRange(radius, canvas.width - radius);
           let y = randomIntFromRange(radius, canvas.height - radius);          
           const color  = randomColor(colors);
