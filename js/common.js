@@ -214,16 +214,15 @@ $(document).ready(function (){
       });
 
       window.addEventListener('mousedown', function(e){
-        const clicked ={
-          x: e.clientX,
-          y: e.clientY          
-        };
         mouse.isDown = true;
-        //particles.push(new Particle(mouse.x, mouse.y, randomColor(colors)));;
       });
 
       window.addEventListener('mouseup', function(e){
         mouse.isDown = false;
+      });
+
+      window.addEventListener('click', function(e){
+        particles.push(new Particle(mouse.x, mouse.y, randomColor(colors)));
       });
 
       window.addEventListener('resize', () => {
@@ -268,8 +267,13 @@ $(document).ready(function (){
           x: velocity.x * Math.cos(angle) - velocity.y * Math.sin(angle),
           y: velocity.x * Math.sin(angle) + velocity.y * Math.cos(angle)
         };
-
         return rotatedVelocities;
+      }
+
+      function getRadius(elem){
+        var radiusUp = setInterval(function(elem){
+          elem += 1;
+        }, 10);
       }
 
       function resolveCollision(particle, otherParticle){
@@ -321,7 +325,6 @@ $(document).ready(function (){
         this.opacity = 0.5;
         this.color = randomColor(colors);
         //this.stopColor = stopGradient();
-        //console.log(this.color);
         this.update = particles => {
           this.draw();
 
@@ -347,14 +350,20 @@ $(document).ready(function (){
             this.opacity = Math.max(0.5, this.opacity);
           }
 
-          //click
-          // if (distance(clicked.x, clicked.y, this.x, this.y) < this.radius) {
-          //   console.log('EEE');
-          // }
-
           if (mouse.isDown === true) {
-            console.log(clicked);
-            mouse.isDown = false;
+            if (distance(mouse.x, mouse.y, this.x, this.y) < this.radius) {
+              for (var j = 0; j < 2; j++) {
+                particles.push(new Particle(mouse.x, mouse.y, randomColor(colors)));                
+              }
+              
+              var index = Array.prototype.indexOf.call(particles, this);
+              // setInterval(function(){
+              //   this.radius += 20;
+              // }, 10);
+              particles.splice(index, 1);
+              console.log(index);
+              mouse.isDown = false;
+            }            
           }
 
           this.x += this.velocity.x;         
