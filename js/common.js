@@ -214,7 +214,7 @@ $(document).ready(function (){
       });
 
       window.addEventListener('mousedown', function(e){
-        mouse.isDown = true;
+       mouse.isDown = true;
       });
 
       window.addEventListener('mouseup', function(e){
@@ -270,10 +270,46 @@ $(document).ready(function (){
         return rotatedVelocities;
       }
 
+      function rotate(velocity, angle){
+        const rotatedVelocities = {
+          x: velocity.x * Math.cos(angle) - velocity.y * Math.sin(angle),
+          y: velocity.x * Math.sin(angle) + velocity.y * Math.cos(angle)
+        };
+        return rotatedVelocities;
+      }
+
+      function gravity(velocity, angle){
+        const gravityVelocities = {
+          //x: velocity.x * (Math.cos(angle) + Math.cos(Math.PI / 2)) + velocity.y * (Math.sin(angle) + Math.sin(Math.PI / 2)),
+          //y: velocity.x * (Math.sin(angle) + Math.sin(Math.PI / 2)) - velocity.y * (Math.cos(angle) + Math.cos(Math.PI / 2))
+          x: velocity.x * (Math.cos(angle) - Math.cos(Math.PI / 2)),
+          y: velocity.y * (Math.sin(angle) - Math.sin(Math.PI / 2))
+        };
+        return gravityVelocities;
+      }
+
       function getRadius(elem){
-        var radiusUp = setInterval(function(elem){
-          elem += 1;
-        }, 10);
+        const index = Array.prototype.indexOf.call(particles, elem);
+        let radiusUp = setInterval(function(){
+          if (elem.radius >= elem.radiusMax){
+            clearInterval(radiusUp);
+            particles.splice(index, 1);
+          }
+          elem.radius += elem.dRadius;
+        }, 1);
+      }
+
+      function gravityMerger(particle, otherParticle){
+        const angle = -Math.atan2(otherParticle.y - particle.y, otherParticle.x - particle.x);
+        
+        const v1 = gravity(particle.velocity, angle);
+        const v2 = gravity(otherParticle.velocity, angle);
+
+        particle.velocity.x = v1.x;
+        particle.velocity.y = v1.y;
+
+        otherParticle.velocity.x = v2.x;
+        otherParticle.velocity.y = v2.y;
       }
 
       function resolveCollision(particle, otherParticle){
@@ -285,7 +321,7 @@ $(document).ready(function (){
 
         if (xVelocityDiff * xDist + yVelocityDiff * yDist >= 0) {
           const angle = -Math.atan2(otherParticle.y - particle.y, otherParticle.x - particle.x);
-
+          //console.log(Math.PI - angle);
           const m1 = particle.mass;
           const m2 = otherParticle.mass;
 
@@ -317,22 +353,28 @@ $(document).ready(function (){
         this.x = x;
         this.y = y; 
         this.velocity = {
-          x: (Math.random() - 0.5) * 5,
-          y: (Math.random() - 0.5) * 5
+          x: (Math.random() - 0.5) * 2,
+          y: (Math.random() - 0.5) * 2
         };
         this.radius = randomIntFromRange(15, 30);
+        this.radiusMax = this.radius * 3;
+        this.dRadius = this.radius / 100; 
         this.mass = 1;
         this.opacity = 0.5;
         this.color = randomColor(colors);
-        //this.stopColor = stopGradient();
         this.update = particles => {
           this.draw();
+          //const index = Array.prototype.indexOf.call(particles, this);
 
           for (let i = 0; i < particles.length; i++) {
             if (this === particles[i]) continue;
-            if (distance(this.x, this.y, particles[i].x, particles[i].y) - this.radius * 2 < 0) {
-              resolveCollision(this, particles[i]);
+            if (distance(this.x, this.y, particles[i].x, particles[i].y) - (this.radius + particles[i].radius) < 0 && this.color !== particles[i].color) {
+              resolveCollision(this, particles[i]);              
             }
+            if (distance(this.x, this.y, particles[i].x, particles[i].y) - (this.radius + particles[i].radius) < 0 && this.color === particles[i].color) {
+              gravityMerger(this, particles[i]);           
+            }
+
           }
 
           if (this.x - this.radius <= 0 || this.x + this.radius > innerWidth) {
@@ -350,21 +392,13 @@ $(document).ready(function (){
             this.opacity = Math.max(0.5, this.opacity);
           }
 
-          if (mouse.isDown === true) {
-            if (distance(mouse.x, mouse.y, this.x, this.y) < this.radius) {
-              for (var j = 0; j < 2; j++) {
-                particles.push(new Particle(mouse.x, mouse.y, randomColor(colors)));                
-              }
-              
-              var index = Array.prototype.indexOf.call(particles, this);
-              // setInterval(function(){
-              //   this.radius += 20;
-              // }, 10);
-              particles.splice(index, 1);
-              console.log(index);
-              mouse.isDown = false;
-            }            
-          }
+          if (mouse.isDown === true && distance(mouse.x, mouse.y, this.x, this.y) < this.radius) {
+            for (var j = 0; j < 2; j++) {
+              particles.push(new Particle(mouse.x, mouse.y, randomColor(colors)));                
+            }
+            getRadius(this);
+            mouse.isDown = false; 
+          } 
 
           this.x += this.velocity.x;         
           this.y += this.velocity.y;         
@@ -374,7 +408,7 @@ $(document).ready(function (){
           ctx.beginPath();
           ctx.arc( this.x, this.y, this.radius, 0, 360 * grad, false);
           ctx.save();
-          ctx.globalAlpha = this.opacity;          
+          //ctx.globalAlpha = this.opacity;          
           const radGrad = gradient(this.x, this.y, this.radius / 10, this.x, this.y, this.radius);
           radGrad.addColorStop(0, this.color.tone7);
           radGrad.addColorStop(0.2, this.color.tone6);
@@ -398,7 +432,7 @@ $(document).ready(function (){
 
       function init(){
         particles = [];
-        for (let i = 0; i < 40; i++) {
+        for (let i = 0; i < 15; i++) {
           const radius = 30;
           let x = randomIntFromRange(radius, canvas.width - radius);
           let y = randomIntFromRange(radius, canvas.height - radius);          
