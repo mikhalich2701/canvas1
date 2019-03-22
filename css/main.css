@@ -5,7 +5,8 @@
 /*============================ ГЛАВНАЯ ===========================*/
 
 #canvas {
-  border: 1px solid #000;
+  border: 1px solid;
+  background: #ccc;
   width: 100%;
   height: 100%;
 }
